@@ -449,6 +449,11 @@ async def get_student_attendance(student_id: str, current_user: dict = Depends(g
     
     attendance_records = await db.attendance.find({"student_id": student_id}).sort("date", -1).to_list(1000)
     
+    # Convert ObjectIds to strings for JSON serialization
+    for record in attendance_records:
+        if "_id" in record:
+            record["_id"] = str(record["_id"])
+    
     # Calculate statistics
     total_days = len(attendance_records)
     present_days = len([r for r in attendance_records if r["status"] == "present"])
