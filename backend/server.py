@@ -484,11 +484,12 @@ async def override_attendance(data: AttendanceOverride, current_user: dict = Dep
         raise HTTPException(status_code=403, detail="Only teachers can override attendance")
     
     await db.attendance.update_one(
-        {"student_id": data.student_id, "date": data.date},
+        {"student_id": data.student_id, "date": data.date, "period": data.period},
         {
             "$set": {
                 "student_id": data.student_id,
                 "date": data.date,
+                "period": data.period,
                 "status": data.status,
                 "marked_by": "teacher",
                 "teacher_id": current_user["user_id"],
