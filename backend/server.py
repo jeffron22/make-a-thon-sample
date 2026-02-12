@@ -627,12 +627,22 @@ async def get_student_dashboard(student_id: str, current_user: dict = Depends(ge
     # Get attendance records
     attendance_records = await db.attendance.find({"student_id": student_id}).sort("date", -1).to_list(1000)
     
+    # Convert ObjectIds to strings for JSON serialization
+    for record in attendance_records:
+        if "_id" in record:
+            record["_id"] = str(record["_id"])
+    
     total_days = len(attendance_records)
     present_days = len([r for r in attendance_records if r["status"] == "present"])
     percentage = (present_days / total_days * 100) if total_days > 0 else 0
     
     # Get recent curriculum
     recent_curriculum = await db.curriculum.find({}).sort("date", -1).limit(10).to_list(10)
+    
+    # Convert ObjectIds to strings for JSON serialization
+    for curriculum in recent_curriculum:
+        if "_id" in curriculum:
+            curriculum["_id"] = str(curriculum["_id"])
     
     return {
         "attendance": {
