@@ -157,7 +157,7 @@ export default function CurriculumManagement() {
               <View style={styles.cardHeader}>
                 <View style={styles.dateContainer}>
                   <Ionicons name="calendar" size={16} color="#6366f1" />
-                  <Text style={styles.date}>{item.date}</Text>
+                  <Text style={styles.date}>{item.date} - Period {item.period || 1}</Text>
                 </View>
                 <Text style={styles.subject}>{item.subject}</Text>
               </View>
