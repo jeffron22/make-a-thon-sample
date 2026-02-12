@@ -213,25 +213,82 @@ export default function StudentDashboard() {
           ))}
         </View>
 
-        {/* Curriculum */}
+        {/* Today's Period-wise Curriculum */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Ionicons name="book" size={24} color="#6366f1" />
-            <Text style={styles.cardTitle}>Recent Curriculum</Text>
+            <Text style={styles.cardTitle}>Today's Curriculum</Text>
           </View>
+          <Text style={styles.periodSubtitle}>
+            Your attendance status for each period
+          </Text>
           {curriculum.length === 0 ? (
-            <Text style={styles.emptyText}>No curriculum added yet</Text>
+            <Text style={styles.emptyText}>No curriculum added for today</Text>
           ) : (
-            curriculum.map((item) => (
-              <View key={item._id} style={styles.curriculumItem}>
-                <View style={styles.curriculumHeader}>
-                  <Text style={styles.curriculumDate}>{item.date}</Text>
-                  <Text style={styles.curriculumSubject}>{item.subject}</Text>
+            curriculum.map((item: any) => (
+              <View
+                key={item._id}
+                style={[
+                  styles.periodCard,
+                  {
+                    backgroundColor:
+                      item.color === 'green'
+                        ? '#d1fae5'
+                        : item.color === 'red'
+                        ? '#fee2e2'
+                        : '#f3f4f6',
+                    borderLeftWidth: 4,
+                    borderLeftColor:
+                      item.color === 'green'
+                        ? '#10b981'
+                        : item.color === 'red'
+                        ? '#ef4444'
+                        : '#9ca3af',
+                  },
+                ]}
+              >
+                <View style={styles.periodHeader}>
+                  <View style={styles.periodInfo}>
+                    <Text style={styles.periodNumber}>Period {item.period}</Text>
+                    <Text style={styles.periodSubject}>{item.subject}</Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.attendanceIcon,
+                      {
+                        backgroundColor:
+                          item.color === 'green'
+                            ? '#10b981'
+                            : item.color === 'red'
+                            ? '#ef4444'
+                            : '#9ca3af',
+                      },
+                    ]}
+                  >
+                    <Ionicons
+                      name={
+                        item.color === 'green'
+                          ? 'checkmark'
+                          : item.color === 'red'
+                          ? 'close'
+                          : 'help'
+                      }
+                      size={20}
+                      color="#fff"
+                    />
+                  </View>
                 </View>
-                <Text style={styles.curriculumTopics}>{item.topics}</Text>
+                <Text style={styles.periodTopics}>{item.topics}</Text>
                 {item.notes && (
-                  <Text style={styles.curriculumNotes}>{item.notes}</Text>
+                  <Text style={styles.periodNotes}>{item.notes}</Text>
                 )}
+                <Text style={styles.attendanceLabel}>
+                  {item.attendance_status === 'present'
+                    ? 'You were present'
+                    : item.attendance_status === 'absent'
+                    ? 'You were absent'
+                    : 'Attendance not marked'}
+                </Text>
               </View>
             ))
           )}
