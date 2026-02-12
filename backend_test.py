@@ -171,6 +171,7 @@ class AttendanceSystemTester:
             if response.status_code == 200:
                 data = response.json()
                 self.student_token = data.get("access_token")
+                self.student_data = data.get("user")  # Capture student data here
                 self.log_test("Student Login", True, f"Login successful for {data['user']['name']}")
                 return True
             else:
