@@ -541,6 +541,7 @@ async def create_curriculum(data: CurriculumCreate, current_user: dict = Depends
     curriculum_doc = {
         "_id": str(uuid.uuid4()),
         "date": data.date,
+        "period": data.period,
         "subject": data.subject,
         "topics": data.topics,
         "notes": data.notes,
@@ -553,14 +554,67 @@ async def create_curriculum(data: CurriculumCreate, current_user: dict = Depends
     return {"message": "Curriculum created successfully", "id": curriculum_doc["_id"]}
 
 @api_router.get("/curriculum")
-async def get_curriculum(date: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+async def get_curriculum(date: Optional[str] = None, period: Optional[int] = None, current_user: dict = Depends(get_current_user)):
     query = {}
     if date:
         query["date"] = date
+    if period:
+        query["period"] = period
     
-    curriculum_records = await db.curriculum.find(query).sort("date", -1).to_list(1000)
+    curriculum_records = await db.curriculum.find(query).sort([("date", -1), ("period", 1)]).to_list(1000)
     
     return curriculum_records
+
+@api_router.get("/curriculum/student/{student_id}")
+async def get_student_curriculum_with_attendance(
+    student_id: str, 
+    date: Optional[str] = None, 
+    current_user: dict = Depends(get_current_user)
+):
+    """Get curriculum with attendance status for a student (color-coded)"""
+    # Students can only view their own data
+    if current_user["role"] == "student":
+        user = await db.users.find_one({"_id": current_user["user_id"]})
+        if user and user.get("student_id") != student_id:
+            raise HTTPException(status_code=403, detail="Cannot view other student's curriculum")
+    
+    # Get curriculum for the date
+    query = {}
+    if date:
+        query["date"] = date
+    else:
+        # Default to today
+        query["date"] = datetime.utcnow().strftime('%Y-%m-%d')
+    
+    curriculum_records = await db.curriculum.find(query).sort("period", 1).to_list(1000)
+    
+    # Get attendance records for this student on the same date
+    attendance_records = await db.attendance.find({
+        "student_id": student_id,
+        "date": query["date"]
+    }).to_list(1000)
+    
+    # Create a map of period -> attendance status
+    attendance_map = {record["period"]: record["status"] for record in attendance_records if "period" in record}
+    
+    # Combine curriculum with attendance status
+    result = []
+    for curriculum in curriculum_records:
+        period = curriculum.get("period", 0)
+        attendance_status = attendance_map.get(period, "not_marked")
+        
+        result.append({
+            "_id": str(curriculum.get("_id")),
+            "date": curriculum.get("date"),
+            "period": period,
+            "subject": curriculum.get("subject"),
+            "topics": curriculum.get("topics"),
+            "notes": curriculum.get("notes"),
+            "attendance_status": attendance_status,  # present, absent, not_marked
+            "color": "green" if attendance_status == "present" else ("red" if attendance_status == "absent" else "gray")
+        })
+    
+    return result
 
 @api_router.put("/curriculum/{curriculum_id}")
 async def update_curriculum(curriculum_id: str, data: CurriculumCreate, current_user: dict = Depends(get_current_user)):
@@ -572,6 +626,7 @@ async def update_curriculum(curriculum_id: str, data: CurriculumCreate, current_
         {
             "$set": {
                 "date": data.date,
+                "period": data.period,
                 "subject": data.subject,
                 "topics": data.topics,
                 "notes": data.notes,
