@@ -200,6 +200,29 @@ export default function CurriculumManagement() {
               onChangeText={setDate}
             />
 
+            <Text style={styles.inputLabel}>Period *</Text>
+            <View style={styles.periodSelector}>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((p) => (
+                <TouchableOpacity
+                  key={p}
+                  style={[
+                    styles.periodButton,
+                    period === p && styles.periodButtonActive,
+                  ]}
+                  onPress={() => setPeriod(p)}
+                >
+                  <Text
+                    style={[
+                      styles.periodButtonText,
+                      period === p && styles.periodButtonTextActive,
+                    ]}
+                  >
+                    {p}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
             <Text style={styles.inputLabel}>Subject *</Text>
             <TextInput
               style={styles.textInput}
