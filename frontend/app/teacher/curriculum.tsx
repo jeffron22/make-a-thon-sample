@@ -426,4 +426,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  periodSelector: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 16,
+  },
+  periodButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#e5e7eb',
+  },
+  periodButtonActive: {
+    backgroundColor: '#6366f1',
+    borderColor: '#6366f1',
+  },
+  periodButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#6b7280',
+  },
+  periodButtonTextActive: {
+    color: '#fff',
+  },
 });
