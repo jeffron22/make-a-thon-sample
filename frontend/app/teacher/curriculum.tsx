@@ -22,6 +22,7 @@ const API_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 interface CurriculumItem {
   _id: string;
   date: string;
+  period: number;
   subject: string;
   topics: string;
   notes?: string;
@@ -34,6 +35,7 @@ export default function CurriculumManagement() {
   const [editMode, setEditMode] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [period, setPeriod] = useState(1);
   const [subject, setSubject] = useState('');
   const [topics, setTopics] = useState('');
   const [notes, setNotes] = useState('');
