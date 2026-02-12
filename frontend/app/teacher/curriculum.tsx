@@ -62,6 +62,7 @@ export default function CurriculumManagement() {
   const openAddModal = () => {
     setEditMode(false);
     setDate(new Date().toISOString().split('T')[0]);
+    setPeriod(1);
     setSubject('');
     setTopics('');
     setNotes('');
@@ -72,6 +73,7 @@ export default function CurriculumManagement() {
     setEditMode(true);
     setSelectedId(item._id);
     setDate(item.date);
+    setPeriod(item.period || 1);
     setSubject(item.subject);
     setTopics(item.topics);
     setNotes(item.notes || '');
@@ -88,7 +90,7 @@ export default function CurriculumManagement() {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const payload = { date, subject, topics, notes };
+      const payload = { date, period, subject, topics, notes };
 
       if (editMode) {
         await axios.put(
