@@ -72,13 +72,21 @@ class StudentUpload(BaseModel):
 class AttendanceOverride(BaseModel):
     student_id: str
     date: str
+    period: int  # Period number (1-8)
     status: str  # 'present' or 'absent'
 
 class CurriculumCreate(BaseModel):
     date: str
+    period: int  # Period number (1-8)
     subject: str
     topics: str
     notes: Optional[str] = None
+
+class PeriodConfig(BaseModel):
+    period_number: int
+    start_time: str  # "09:00"
+    end_time: str    # "10:00"
+    name: str        # "Period 1"
 
 class CCTVConfig(BaseModel):
     stream_url: str
