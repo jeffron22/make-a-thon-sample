@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   Switch,
+  Platform,
 } from 'react-native';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
