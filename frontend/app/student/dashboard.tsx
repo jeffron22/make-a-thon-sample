@@ -476,4 +476,59 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 20,
   },
+  periodSubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+    marginBottom: 16,
+  },
+  periodCard: {
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  periodHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  periodInfo: {
+    flex: 1,
+  },
+  periodNumber: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6b7280',
+    marginBottom: 4,
+  },
+  periodSubject: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#111827',
+  },
+  attendanceIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  periodTopics: {
+    fontSize: 16,
+    color: '#374151',
+    marginBottom: 8,
+    lineHeight: 22,
+  },
+  periodNotes: {
+    fontSize: 14,
+    color: '#6b7280',
+    fontStyle: 'italic',
+    marginBottom: 8,
+  },
+  attendanceLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#6b7280',
+    marginTop: 4,
+  },
 });
