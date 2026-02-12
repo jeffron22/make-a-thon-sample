@@ -67,14 +67,26 @@ export default function StudentDashboard() {
   const fetchDashboardData = async (studentId: string) => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.get(
-        `${API_URL}/api/dashboard/student/${studentId}`,
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Get period-wise curriculum with attendance status
+      const curriculumResponse = await axios.get(
+        `${API_URL}/api/curriculum/student/${studentId}?date=${today}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setAttendance(response.data.attendance);
-      setCurriculum(response.data.curriculum);
+      
+      // Get overall attendance stats
+      const attendanceResponse = await axios.get(
+        `${API_URL}/api/attendance/student/${studentId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      
+      setAttendance(attendanceResponse.data);
+      setCurriculum(curriculumResponse.data);
     } catch (error: any) {
       console.error('Error fetching dashboard:', error);
       Alert.alert('Error', 'Failed to load dashboard data');
